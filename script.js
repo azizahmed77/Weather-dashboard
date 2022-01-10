@@ -26,8 +26,24 @@ console.log(APIKey)
 //API call = https://api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}
 
 
+let renderSearchedCities = (cityName) => {
+    let city = document.createElement("li");
+    city.setAttribute("class", "search-again-btn");
+    city.setAttribute("class", "card-body")
+    
+    city.textContent = cityName;
+    
+    searchListEl.appendChild(city)
 
-var fetchCityInfo = (cityName) => {
+    city.addEventListener("click", function (event) {
+        console.log(event.target.value)
+        fetchCityInfo(cityName)
+    });
+
+    
+}
+
+let fetchCityInfo = (cityName) => {
     event.preventDefault();
 
     
@@ -42,17 +58,17 @@ var fetchCityInfo = (cityName) => {
 
 
 
-                var latitude = data.coord.lat;
-                var longitude = data.coord.lon;
-                var locationName = data.name;
+                let latitude = data.coord.lat;
+                let longitude = data.coord.lon;
+                let locationName = data.name;
 
-                //check if city exists in storage/array -- update it if not
-                var searchHistory = storedCitiesArray.includes(cityName)
+                
+                let searchHistory = storedCitiesArray.includes(cityName)
                 if (!searchHistory) {
                     storedCitiesArray.push(cityName)
                     localStorage.setItem("storedCities", JSON.stringify(storedCitiesArray))
 
-                    renderSearchListEl(cityName)
+                    renderSearchedCities(cityName)
                 }
 
                 //fetchCurrentWeather(latitude, longitude, locationName);
@@ -66,6 +82,7 @@ var fetchCityInfo = (cityName) => {
         }
     });
 };
+
 searchFormEl.addEventListener("submit", function () {
     cityName = searchInputEl.value.trim();
     fetchCityInfo(cityName);
