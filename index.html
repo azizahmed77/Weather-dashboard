@@ -16,13 +16,13 @@
     </header>
     <main class="row">
         <!-- Search form and search history-->
-        <section class="row mt-3 col-4 ">
+        <section class=" container row mt-3 col-4 ">
             <div class="col-12 card" > 
                 <h3 class= "card-header">
                     Search City
                 </h3>
-                <form class = "row" id="search-form" style="width:250px;">
-                    <input class = "col-12" placeholder="Search" id="search-input" >
+                <form class = " card-text row" id="search-form">
+                    <input class ="col-12" placeholder="Search" id="search-input" >
                     <button class="col-12 bg-dark text-white" type="submit" id="search-btn">Search</button>
                 </form>
             </div>
@@ -37,7 +37,9 @@
         <!-- Current Weather and forecast-->
         <section class = "col-8">
             <div class = "card" id="current" ></div>
-            <div class = "card" id="forecast" ></div>
+            <div class = "row" id="forecast" >
+                <h2 class="col-12" id="forecast-header" ></h2>      
+            </div>
         </section>
     </div>
   

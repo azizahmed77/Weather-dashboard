@@ -19,7 +19,8 @@ let searchListEl = document.querySelector('#searched-list');
 let btnEl = document.getElementById("search-btn");
 let storedCitiesArray=[]
 let currentWeatherDiv = document.querySelector('#current');
-let forecastEl = document.querySelector('#forecast')
+let forecastDiv = document.querySelector('#forecast')
+let forecastHeaderEl = document.getElementById("forecast-header");
 const APIKey = "eb52eb5452da47e3828a6d3d29f21b3b"
 console.log(APIKey)
 
@@ -60,19 +61,8 @@ let fetchCurrentWeather = (data) => {
     windEl.setAttribute("class", "list-group-item")
     let uviEl = document.createElement ("li");
     uviEl.setAttribute("class", "list-group-item")
-    let uviColor = document.createElement("span")
-    //color indicator for uvi
+    //let uviColor = document.createElement("span")
 
-    /*uviColor.textContent = "UV Index: " + uvi
-        if (uvi <= 3) {
-            uviColor.setAttribute("class", "bg-success ")
-        } else if (uvi <= 8) {
-            uviColor.setAttribute("class","bg-warning ")
-        } else {
-            uviColor.setAttribute("class", "bg-danger ")
-        }
-    */
-    // interpolate data
     tempEl.textContent = "Temperature: " + temperature + "°F";
     windEl.textContent = "Wind: " + wind + " MPH";
     humidityEl.textContent = "Humidity: " + humidity + "%";
@@ -90,7 +80,7 @@ let fetchCurrentWeather = (data) => {
 };
 let renderPrevSearches = (cityName) => {
     let prevCity = document.createElement("li");
-    prevCity.setAttribute("class", "search-again-btn list-group-item align-top text-center");
+    prevCity.setAttribute("class", "search-again-btn list-group-item align-top text-center bg-dark text-white");
     
     
     prevCity.textContent = cityName.toUpperCase();
@@ -105,7 +95,68 @@ let renderPrevSearches = (cityName) => {
     
 }
 
+let fetchForecast= (latitude, longitude) => {
+
+    let forecastApiUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + latitude + "&lon=" + longitude + "&units=imperial&exclude=minutely,hourly&appid=" + APIKey;
+
+    fetch(forecastApiUrl)
+    .then((response) => {
+        response.json().then((data) => {
+           
+            forecastDiv.textContent = "";
+            forecastHeaderEl.textContent = "5-day Forecast:"
+
+            for (let i = 1; i < 6; i++) {
+                let forecastIcon = data.daily[i].weather[0].icon;
+                let forecastTemp = data.daily[i].temp.day;
+                let forecastWind = data.daily[i].wind_speed;
+                let forecastHumidity = data.daily[i].humidity;
+
+                
+                let forecastCard = document.createElement("div");
+                forecastCard.setAttribute("class", "card bg-dark text-white text-center mx-2 col-2");
+
+                let cardBody = document.createElement("div");
+                cardBody.setAttribute("class", "card-body");
+                let forecastDate = document.createElement("h5");
+                forecastDate.textContent = dayjs().add(i, 'days').format("MMMM DD");
+
+                let forecastIconEl = document.createElement("img");
+                forecastIconEl.setAttribute("src", "https://openweathermap.org/img/wn/" + forecastIcon + "@2x.png")
+
+                let forecastTempEl = document.createElement("h6");
+                forecastTempEl.setAttribute("class", "card-text");
+                forecastTempEl.textContent = "Temperature:  " + forecastTemp + "°F";
+
+                let forecastWindEl = document.createElement("h6");
+                forecastWindEl.setAttribute("class", "card-text")
+                forecastWindEl.textContent = "Wind:  " + forecastWind + "MPH";
+
+
+
+                let forecastHumidityEl = document.createElement("h6")
+                forecastHumidityEl.setAttribute("class", "card-text");
+                forecastHumidityEl.textContent = "Humidity:  " + forecastHumidity + "%";
+
+              
+                cardBody.appendChild(forecastDate)
+                cardBody.appendChild(forecastIconEl)
+                cardBody.appendChild(forecastTempEl)
+                cardBody.appendChild(forecastWindEl)
+                cardBody.appendChild(forecastHumidityEl)
+
+              
+                forecastCard.appendChild(cardBody);
+                forecastDiv.appendChild(forecastCard);
+                searchFormEl.reset()
+
+            }
+        })
+    })
+}
+
 let fetchCityInfo = (cityName) => {
+
     event.preventDefault();
 
     
@@ -134,7 +185,7 @@ let fetchCityInfo = (cityName) => {
                 }
 
                 fetchCurrentWeather(data);
-                //fetchForecast(latitude,longitude, locationName)
+                fetchForecast(latitude,longitude)
 
             });
 
