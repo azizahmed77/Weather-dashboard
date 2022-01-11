@@ -88,12 +88,12 @@ let fetchCurrentWeather = (data) => {
     currentWeatherDiv.appendChild(displayData);
     
 };
-let renderSearchedCities = (cityName) => {
+let renderPrevSearches = (cityName) => {
     let prevCity = document.createElement("li");
-    prevCity.setAttribute("class", "search-again-btn list-group-item align-top");
+    prevCity.setAttribute("class", "search-again-btn list-group-item align-top text-center");
     
     
-    prevCity.textContent = cityName;
+    prevCity.textContent = cityName.toUpperCase();
     
     searchListEl.appendChild(prevCity)
 
@@ -130,7 +130,7 @@ let fetchCityInfo = (cityName) => {
                     storedCitiesArray.push(cityName)
                     localStorage.setItem("storedCities", JSON.stringify(storedCitiesArray))
 
-                    renderSearchedCities(cityName)
+                    renderPrevSearches(cityName)
                 }
 
                 fetchCurrentWeather(data);
@@ -144,6 +144,22 @@ let fetchCityInfo = (cityName) => {
         }
     });
 };
+
+let loadStoredCities = () => {
+    let cities = localStorage.getItem("storedCities")
+    if(!cities) {
+        return;
+    }
+    
+    cities = JSON.parse(cities);
+    
+    for (let i=0; i < cities.length; i++) {
+        renderPrevSearches(cities[i])
+        storedCitiesArray.push(cities[i])
+    }
+}
+
+loadStoredCities()
 
 searchFormEl.addEventListener("submit", function () {
     
