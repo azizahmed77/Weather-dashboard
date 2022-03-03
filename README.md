@@ -4,8 +4,10 @@
 
 ## Description
 
-A app that uses the OpenWeather API to allow users to search for the weather outlook of multiple cities so travelers may plan trips accordingly
+An app that uses the OpenWeather API to allow users to search for the weather outlook of multiple cities so travelers may plan trips accordingly
 
+
+## Contents
 
 - [Technology Used](#technology-used)
 - [Contact](#contact)
